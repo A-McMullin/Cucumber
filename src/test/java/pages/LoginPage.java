@@ -7,11 +7,12 @@ import utils.CommonMethods;
 
 public class LoginPage extends CommonMethods {
 
+    //object repository
     @FindBy(id="txtUsername")
-    public WebElement usernamebox;
+    public WebElement usernameBox;
 
-    @FindBy(id="txtPassword")
-    public WebElement passwordbox;
+    @FindBy(name="txtPassword")
+    public WebElement passwordBox;
 
     @FindBy(id="btnLogin")
     public WebElement loginBtn;
@@ -19,5 +20,4 @@ public class LoginPage extends CommonMethods {
     public LoginPage(){
         PageFactory.initElements(driver, this);
     }
-
 }

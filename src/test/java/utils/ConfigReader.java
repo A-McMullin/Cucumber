@@ -1,16 +1,16 @@
 package utils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
 public class ConfigReader {
-
     static Properties prop;
 
+    //this method will read any property file
     public static Properties readProperties(String filePath){
-
         try {
             FileInputStream fis = new FileInputStream(filePath);
             prop = new Properties();
@@ -22,8 +22,9 @@ public class ConfigReader {
         }
         return prop;
     }
-    //this method gets single value based on the key
-    public static String getPropertyValue(String key) {
+
+    //this method get single value based on the key
+    public static String getPropertyValue(String key){
         return prop.getProperty(key);
     }
 

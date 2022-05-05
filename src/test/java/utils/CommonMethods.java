@@ -1,8 +1,6 @@
 package utils;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import io.github.bonigarcia.wdm.managers.FirefoxDriverManager;
-import org.apache.commons.compress.harmony.pack200.PackingUtils;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,31 +10,30 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import steps.PageInitializers;
 
-import java.io.ObjectInputFilter;
 import java.util.concurrent.TimeUnit;
 
 public class CommonMethods extends PageInitializers {
 
     public static WebDriver driver;
 
-    public void openBrowserAndLaunchApplication() {
-    ConfigReader.readProperties(Constants.CONFIGURATION_FILEPATH);
-    switch (ConfigReader.getPropertyValue("browser")) {
-        case "chrome":
-            WebDriverManager.chromedriver().setup();
-            driver = new ChromeDriver();
-            break;
-        case "firefox":
-            WebDriverManager.firefoxdriver().setup();
-            driver = new FirefoxDriver();
-            break;
-        default:
-            throw new RuntimeException("Invalid browser name");
+    public void openBrowserAndLaunchApplication(){
+        ConfigReader.readProperties(Constants.CONFIGURATION_FILEPATH);
+        switch (ConfigReader.getPropertyValue("browser")){
+            case "chrome":
+                WebDriverManager.chromedriver().setup();
+                driver = new ChromeDriver();
+                break;
+            case "firefox":
+                WebDriverManager.firefoxdriver().setup();
+                driver = new FirefoxDriver();
+                break;
+            default:
+                throw new RuntimeException("Invalid browser name");
         }
         driver.get(ConfigReader.getPropertyValue("url"));
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Constants.IMPLICIT_WAIT, TimeUnit.SECONDS);
-        initializePageObjects();
+        intializePageObjects();
     }
 
     public static void sendText(WebElement element, String textToSend){
@@ -49,11 +46,11 @@ public class CommonMethods extends PageInitializers {
         return wait;
     }
 
-    public static void waitForClickability (WebElement element){
+    public static void waitForClickability(WebElement element){
         getWait().until(ExpectedConditions.elementToBeClickable(element));
     }
 
-    public static void click(WebElement element) {
+    public static void click(WebElement element){
         waitForClickability(element);
         element.click();
     }
@@ -67,7 +64,8 @@ public class CommonMethods extends PageInitializers {
         getJSExecutor().executeScript("arguments[0].click();", element);
     }
 
-    public void tearDown(){
+    public static void tearDown(){
         driver.quit();
     }
+
 }

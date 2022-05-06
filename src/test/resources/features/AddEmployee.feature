@@ -40,3 +40,7 @@ Feature: Adding the employees in HRMS application
       |a        |a         |a       |
       |b        |b         |b       |
       |c        |c         |c       |
+
+        @excel
+  Scenario: Adding multiple employees from excel file
+    When user add multiple employees from excel file using "EmployeeData" sheet and verify the user added

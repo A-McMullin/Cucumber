@@ -22,22 +22,26 @@ public class ExcelReader {
             book= new XSSFWorkbook(fis);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }catch (IOException e){
+        } catch (IOException e){
             e.printStackTrace();
         }
     }
+
     //Gets the sheet name
     public static void getSheet(String sheetName){
         sheet=book.getSheet(sheetName);
     }
+
     //Gets the row count in sheet
     public static int getRowCount(){
         return sheet.getPhysicalNumberOfRows();
     }
+
     //Gets the column count in every row
     public static int getColsCount(int rowIndex){
         return sheet.getRow(rowIndex).getPhysicalNumberOfCells();
     }
+
     //Gets the cell data in string format
     public static String getCellData(int rowIndex, int colIndex){
         return sheet.getRow(rowIndex).getCell(colIndex).toString();

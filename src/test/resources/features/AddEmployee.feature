@@ -33,13 +33,13 @@ Feature: Adding the employees in HRMS application
       |c        |c         |c       |
       |d        |d         |d       |
 
-      @test @datatable
+      @test @datatable @excel123
   Scenario: Add employee using data table
       When user provides multiple employee data and verify they are added
       |firstName|middleName|lastName|
-      |a        |a         |a       |
-      |b        |b         |b       |
-      |c        |c         |c       |
+      |a123        |a         |a321       |
+      |b123        |b         |b321       |
+      |c123        |c         |c321       |
 
         @excel
   Scenario: Adding multiple employees from excel file

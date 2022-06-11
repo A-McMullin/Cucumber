@@ -1,21 +1,30 @@
 package steps;
 
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.it.Ma;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import pages.AddEmployeePage;
 import utils.CommonMethods;
 import utils.Constants;
+import utils.DBUtils;
 import utils.ExcelReader;
 
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 public class AddEmployeeSteps extends CommonMethods {
+
+    String empId;
+    String firstName;
+    String dbFirstName;
+    String dbEmpId;
 
     @When("user clicks on PIM option")
     public void user_clicks_on_pim_option() {
@@ -24,6 +33,7 @@ public class AddEmployeeSteps extends CommonMethods {
         // pimOPtion.click();
         click(employeeSearchPage.pimOption);
     }
+
     @When("user clicks on add employee option")
     public void user_clicks_on_add_employee_option() {
         click(employeeSearchPage.addEmployeeOption);
@@ -35,10 +45,12 @@ public class AddEmployeeSteps extends CommonMethods {
         sendText(addEmployeePage.middleNameField, "hamilia");
         sendText(addEmployeePage.lastNameField, "tolom");
     }
+
     @When("user clicks on save button")
     public void user_clicks_on_save_button() {
         click(addEmployeePage.saveButton);
     }
+
     @Then("employee added successfully")
     public void employee_added_successfully() {
         System.out.println("Employee added");
@@ -60,8 +72,8 @@ public class AddEmployeeSteps extends CommonMethods {
 
     @When("user provides multiple employee data and verify they are added")
     public void user_provides_multiple_employee_data_and_verify_they_are_added(DataTable dataTable) throws InterruptedException {
-        List<Map<String, String>> employeeNames =  dataTable.asMaps();
-        for (Map<String, String> employee :employeeNames) {
+        List<Map<String, String>> employeeNames = dataTable.asMaps();
+        for (Map<String, String> employee : employeeNames) {
             System.out.println(employee);
             String firstNameValue = employee.get("firstName");
             String middleNameValue = employee.get("middleName");
@@ -85,7 +97,7 @@ public class AddEmployeeSteps extends CommonMethods {
 
         Iterator<Map<String, String>> itr = newEmployees.iterator();
         //Checks whether the next element exist or not
-        while(itr.hasNext()){
+        while (itr.hasNext()) {
             //It returns the key and value for employees
             Map<String, String> mapNewEmp = itr.next();
             System.out.println(mapNewEmp.get("FirstName"));
@@ -101,7 +113,7 @@ public class AddEmployeeSteps extends CommonMethods {
             //To upload the photograph
             sendText(addEmployeePage.photograph, mapNewEmp.get("Photograph"));
 
-            if(!addEmployeePage.checkBox.isSelected()){
+            if (!addEmployeePage.checkBox.isSelected()) {
                 click(addEmployeePage.checkBox);
             }
 
@@ -117,11 +129,11 @@ public class AddEmployeeSteps extends CommonMethods {
             click(employeeSearchPage.searchButton);
 
             List<WebElement> rowData = driver.findElements(By.xpath("//table[@id='resultTable']/tbody/tr"));
-            for (int i=0; i<rowData.size(); i++){
+            for (int i = 0; i < rowData.size(); i++) {
                 String rowText = rowData.get(i).getText();
                 System.out.println(rowText);
                 String expectedData = empIdValue + " " + mapNewEmp.get("FirstName") + " " +
-                        mapNewEmp.get("MiddleName")+ " " + mapNewEmp.get("LastName");
+                        mapNewEmp.get("MiddleName") + " " + mapNewEmp.get("LastName");
                 Assert.assertEquals(expectedData, rowText);
             }
             click(employeeSearchPage.addEmployeeOption);
@@ -131,4 +143,31 @@ public class AddEmployeeSteps extends CommonMethods {
         }
 
     }
+
+    @And("user grabs the employee id")
+    public void userGrabsTheEmployeeId() {
+        empId=addEmployeePage.empIDLocator.getAttribute("value");
+        firstName=addEmployeePage.firstNameField.getAttribute("value");
+
+    }
+
+
+    @And("user query the database for same employee id")
+    public void userQueryTheDatabaseForSameEmployeeId() throws SQLException {
+
+        String query = "select * from hs_hr_employees where employee_id = '"+empId+"'";
+        List<Map<String,String>> tableData=DBUtils.getDataFromDB(query);
+        dbFirstName=tableData.get(0).get("emp_firstname");
+        dbEmpId=tableData.get(0).get("employee_id");
+
+    }
+
+    @Then("user verifies the results")
+    public void userVerifiesTheResults() {
+        System.out.println("First name from Front end"+firstName);
+        System.out.println("First name from Back end"+dbFirstName);
+        Assert.assertEquals(firstName, dbFirstName);
+        Assert.assertEquals(empId, dbEmpId);
+    }
 }
+

@@ -1,13 +1,19 @@
 package APISteps;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.junit.Assert;
 import utils.APIConstants;
 import utils.APIPayloadConstants;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -64,6 +70,33 @@ public class APIWorkflowSteps {
     @Then("the status call for this employee is {int}")
     public void the_status_call_for_this_employee_is(Integer statusCode) {
         response.then().assertThat().statusCode(statusCode);
+    }
+
+    @And("the employee we are getting having ID {string} must match with the globally stored employee id")
+    public void theEmployeeWeAreGettingHavingIDMustMatchWithTheGloballyStoredEmployeeId(String empID) {
+        String tempID = response.jsonPath().getString(empID);
+        Assert.assertEquals(tempID, employee_id);
+    }
+
+    @Then("the retrieved data at {string} object matches the data used to create the employee having employee id {string}")
+    public void the_retrieved_data_at_object_matches_the_data_used_to_create_the_employee_having_employee_id(String empObject, String resEmpID, DataTable dataTable) {
+        //data comes from the feature file
+        List<Map<String, String>> expectedData = dataTable.asMaps(String.class, String.class);
+        //data comes from get call body
+        Map<String, String> actualData = response.body().jsonPath().get(empObject);
+
+        for (Map<String, String> singlePairOfData:expectedData
+            ) {
+            Set<String> keys = singlePairOfData.keySet();
+
+            for (String key:keys) {
+               String expectedValue = singlePairOfData.get(key);
+               String actualValue = actualData.get(key);
+
+               Assert.assertEquals(expectedValue,actualValue);
+
+            }
+        }
     }
 
 }

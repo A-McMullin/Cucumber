@@ -8,9 +8,9 @@ public class APIPayloadConstants {
                 "  \"emp_lastname\": \"Pam\",\n" +
                 "  \"emp_middle_name\": \"MS\",\n" +
                 "  \"emp_gender\": \"F\",\n" +
-                "  \"emp_birthday\": \"1988-06-11\",\n" +
-                "  \"emp_status\": \"Part Time\",\n" +
-                "  \"emp_job_title\": \"QA\"\n" +
+                "  \"emp_birthday\": \"1989-08-16\",\n" +
+                "  \"emp_status\": \"Full Time\",\n" +
+                "  \"emp_job_title\": \"Supervisor\"\n" +
                 "}";
 
         return createEmployee;

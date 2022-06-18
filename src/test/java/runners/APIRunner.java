@@ -10,12 +10,12 @@ import org.junit.runner.RunWith;
         features = "src/test/resources/features/",
         //glue is where we find implementations for gherkin steps
         //we provide the path of package to get all the step definitions
-        glue = "steps",
+        glue = "APISteps",
         //dryRun we use to get the step definitions of undefined steps.
         //if we set it to true, it will quickly scan all gherkin steps whether they are implemented or not
         //if we set it to true, it stops actual execution
         // to execute scripts in real time, we should set this value to false
-        dryRun = true,
+        dryRun = false,
         //it means the console output for cucumber test is having irrelevant information
         // when we set it to true, it simply removes all the irrelevant information
         monochrome = true,
@@ -32,6 +32,8 @@ import org.junit.runner.RunWith;
 
 )
 
-public class RunnerClass {
+
+public class APIRunner {
+
 
 }
